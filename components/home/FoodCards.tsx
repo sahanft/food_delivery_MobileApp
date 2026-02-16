@@ -1,19 +1,21 @@
-import { fetchItems } from "@/reducer/ItemSlice";
+import { fetchItems, deleteItem } from "@/reducer/ItemSlice";
 import { useNavigation } from "expo-router";
 import React, { useEffect } from "react";
-import { ScrollView, TouchableOpacity, Image, Text, View } from "react-native";
+import { ScrollView, TouchableOpacity, Image, Text, View, Alert } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useSelector, useDispatch } from "react-redux";
 import { useCart } from "../../provider/CartProvider"; // Import the cart context
+import { NavigationProp } from "@react-navigation/native";
+import { RootStackParamList } from "../../app/RootStackParamList";
 
 function FoodCards() {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NavigationProp<RootStackParamList>>();
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.items || []);
+  const items = useSelector((state: any) => state.items || []);
   const { addToCart } = useCart(); // Use the cart context instead of Redux for cart management
 
   useEffect(() => {
-    dispatch(fetchItems());
+    dispatch(fetchItems() as any);
   }, [dispatch]);
 
   const handleAddToCart = (foodItem) => {
@@ -29,9 +31,25 @@ function FoodCards() {
 
     // Add to cart using the context
     addToCart(cartItem);
+  };
 
-    // Optional: show feedback to the user
-    // Alert.alert("Added to cart", `${foodItem.itemName} added to your cart`);
+  const handleDeleteItem = (id, name) => {
+    Alert.alert(
+      "Delete Item",
+      `Are you sure you want to delete ${name}?`,
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Delete",
+          onPress: () => dispatch(deleteItem(id)),
+          style: "destructive"
+        }
+      ]
+    );
+  };
+
+  const handleEditItem = (item) => {
+    navigation.navigate("EditItemScreen", { itemData: item });
   };
 
   return (
@@ -40,7 +58,7 @@ function FoodCards() {
       <View className="w-full mt-4">
         {items.map((foods) => (
           <TouchableOpacity
-            key={foods.id}
+            key={foods.id || foods._id}
             className="h-44 mb-6"
             style={{
               backgroundColor: "white",
@@ -80,12 +98,30 @@ function FoodCards() {
                 left: 10,
               }}
             />
-            <TouchableOpacity
-              className="bg-emerald-800 w-10 h-10 absolute bottom-5 right-5 rounded-full items-center justify-center"
-              onPress={() => handleAddToCart(foods)}
-            >
-              <Icon size={20} name="plus" color={"white"} />
-            </TouchableOpacity>
+
+            {/* Action Buttons */}
+            <View className="absolute bottom-5 right-5 flex-row space-x-3">
+              <TouchableOpacity
+                className="bg-blue-600 w-10 h-10 rounded-full items-center justify-center mr-2"
+                onPress={() => handleEditItem(foods)}
+              >
+                <Icon size={18} name="pencil" color={"white"} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-red-600 w-10 h-10 rounded-full items-center justify-center mr-2"
+                onPress={() => handleDeleteItem(foods.id || foods._id, foods.itemName)}
+              >
+                <Icon size={18} name="trash" color={"white"} />
+              </TouchableOpacity>
+
+              <TouchableOpacity
+                className="bg-emerald-800 w-10 h-10 rounded-full items-center justify-center"
+                onPress={() => handleAddToCart(foods)}
+              >
+                <Icon size={18} name="plus" color={"white"} />
+              </TouchableOpacity>
+            </View>
           </TouchableOpacity>
         ))}
       </View>

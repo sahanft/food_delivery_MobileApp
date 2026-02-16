@@ -18,7 +18,7 @@ export default function HomeScreen() {
         style={{ borderBottomRightRadius: 30, borderBottomLeftRadius: 30 }}
       >
         <Text className="text-white text-xl font-bold top-20 left-5">
-          Hellow Shanilka!
+          Hellow Sahan!
         </Text>
         <Text className="text-white text-3xl font-bold top-20 left-5">
           Place Your Order

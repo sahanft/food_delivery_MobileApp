@@ -48,3 +48,58 @@ Join our community of developers creating universal apps.
 
 - [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
 - [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+
+
+
+
+
+## 1. Item Module
+
+## Operation	Method	URL
+
+Create Item   	   POST	   http://localhost:3000/api/item/saveItem
+Get All Items	   GET	http://localhost:3000/api/item/getAllItem
+Get Item by ID	   GET	http://localhost:3000/api/item/getItem/:id
+Update Item	      PUT	http://localhost:3000/api/item/updateItem/:id
+Delete Item	      DELETE	http://localhost:3000/api/item/deleteItem/:id
+
+Postman Data (JSON Body):
+
+
+{
+  "itemName": "Chicken Burger",
+  "category": "Burgers",
+  "description": "Delicious spicy chicken burger",
+  "shopName": "HotPlate Central",
+  "price": 850,
+  "image": "https://example.com/burger.jpg"
+}
+
+
+
+##  2. Order Module
+
+Place Order	        POST	http://localhost:3000/api/order/AddOrder
+Get All Orders	     GET	http://localhost:3000/api/order/getAllOrder
+Get Order by ID	  GET	http://localhost:3000/api/order/getOrder/:id
+Update Order	     PUT	http://localhost:3000/api/order/updateOrder/:id
+Delete Order	     DELETE	http://localhost:3000/api/order/deleteOrder/:id
+
+Postman Data (JSON Body):
+
+
+{
+  "address": "123 Main St, Colombo",
+  "phoneNumber": "0771234567",
+  "totalPrice": 1700,
+  "items": [
+    {
+      "name": "Chicken Burger",
+      "size": "Regular",
+      "quantity": 2,
+      "price": 850
+    }
+  ]
+}
+
+

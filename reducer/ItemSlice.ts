@@ -19,6 +19,30 @@ export const fetchItems = createAsyncThunk("item/getAllItem", async () => {
   }
 });
 
+export const updateItem = createAsyncThunk(
+  "item/updateItem",
+  async ({ id, itemData }: { id: string; itemData: any }, { rejectWithValue }) => {
+    try {
+      const response = await api.put(`/api/item/updateItem/${id}`, itemData);
+      return response.data;
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Failed to update item");
+    }
+  }
+);
+
+export const deleteItem = createAsyncThunk(
+  "item/deleteItem",
+  async (id: string, { rejectWithValue }) => {
+    try {
+      await api.delete(`/api/item/deleteItem/${id}`);
+      return id; // Return id to remove from state
+    } catch (error: any) {
+      return rejectWithValue(error.response?.data || "Failed to delete item");
+    }
+  }
+);
+
 const itemSlice = createSlice({
   name: "items",
   initialState,
@@ -34,6 +58,15 @@ const itemSlice = createSlice({
       })
       .addCase(fetchItems.pending, () => {
         console.log("Fetching Items...");  // Log during fetch
+      })
+      .addCase(updateItem.fulfilled, (state, action) => {
+        const index = state.findIndex((item: any) => (item.id || item._id) === action.payload._id || action.payload.id);
+        if (index !== -1) {
+          state[index] = action.payload;
+        }
+      })
+      .addCase(deleteItem.fulfilled, (state, action) => {
+        return state.filter((item: any) => (item.id || item._id) !== action.payload);
       });
   },
 });

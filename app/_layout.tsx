@@ -15,6 +15,9 @@ import FoodDetails from "../app/FoodDetails";
 import AddOrderDetails from "../app/AddOrderDetails";
 import TabNavigator from "./(tabs)/_layout";
 
+import EditItemScreen from "../app/EditItemScreen";
+import EditOrderScreen from "../app/EditOrderScreen";
+
 const Stack = createNativeStackNavigator();
 
 export default function RootLayout() {
@@ -42,6 +45,8 @@ export default function RootLayout() {
           <Stack.Screen name="Main" component={TabNavigator} />
           <Stack.Screen name="CartScreen" component={CartScreen} />
           <Stack.Screen name="FoodDetails" component={FoodDetails} />
+          <Stack.Screen name="EditItemScreen" component={EditItemScreen} />
+          <Stack.Screen name="EditOrderScreen" component={EditOrderScreen} />
         </Stack.Navigator>
         <StatusBar />
       </CartProvider>
